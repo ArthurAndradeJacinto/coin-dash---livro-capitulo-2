@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://dscusm2u1jfww"]
+
+[ext_resource type="Texture2D" uid="uid://dk3to4cmkyoip" path="res://assets/grass.png" id="1_8gbba"]
+[ext_resource type="PackedScene" uid="uid://8efeftgryua0" path="res://Entities/player.tscn" id="1_jjgbg"]
+[ext_resource type="Script" uid="uid://cku43wmbmxlsw" path="res://Scripts/main.gd" id="1_jjvhh"]
+[ext_resource type="PackedScene" uid="uid://f1anfbfvtfdq" path="res://Entities/coin.tscn" id="2_bo1nx"]
+[ext_resource type="PackedScene" uid="uid://kv08pw3civt2" path="res://Visual/HUD.tscn" id="5_kry3j"]
+[ext_resource type="AudioStream" uid="uid://dh2r0epmvb2sk" path="res://assets/audio/Coin.wav" id="6_344ge"]
+[ext_resource type="AudioStream" uid="uid://b0s3s6t05m2r1" path="res://assets/audio/Level.wav" id="7_ynf5e"]
+[ext_resource type="AudioStream" uid="uid://dcju81bhwrftk" path="res://assets/audio/EndSound.wav" id="8_hptm8"]
+
+[node name="main" type="Node2D" unique_id=19279444]
+script = ExtResource("1_jjvhh")
+coin_scene = ExtResource("2_bo1nx")
+
+[node name="Background" type="TextureRect" parent="." unique_id=1367805813]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_right = 480.0
+offset_bottom = 720.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_8gbba")
+stretch_mode = 1
+
+[node name="Player" parent="." unique_id=453199883 instance=ExtResource("1_jjgbg")]
+position = Vector2(-159, 76)
+
+[node name="Coin" parent="." unique_id=880788930 instance=ExtResource("2_bo1nx")]
+position = Vector2(-161, 165)
+
+[node name="Game_Timer" type="Timer" parent="." unique_id=1905471613]
+
+[node name="HUD" parent="." unique_id=1345990798 instance=ExtResource("5_kry3j")]
+
+[node name="CoinSound" type="AudioStreamPlayer" parent="." unique_id=1749578387]
+stream = ExtResource("6_344ge")
+volume_db = -20.0
+
+[node name="LevelSound" type="AudioStreamPlayer" parent="." unique_id=963707773]
+stream = ExtResource("7_ynf5e")
+volume_db = -10.992
+
+[node name="EndSound" type="AudioStreamPlayer" parent="." unique_id=1264904897]
+stream = ExtResource("8_hptm8")
+volume_db = -5.0
+
+[connection signal="hurt" from="Player" to="." method="_on_player_hurt"]
+[connection signal="pickup" from="Player" to="." method="_on_player_pickup"]
+[connection signal="timeout" from="Game_Timer" to="." method="_on_game_timer_timeout"]
+[connection signal="start_game" from="HUD" to="." method="_on_hud_start_game"]

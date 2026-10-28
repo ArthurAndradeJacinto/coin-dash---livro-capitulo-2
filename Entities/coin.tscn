@@ -68,5 +68,6 @@ shape = SubResource("CircleShape2D_4jiie")
 scale = Vector2(0.4, 0.4)
 sprite_frames = SubResource("SpriteFrames_4jiie")
 animation = &"shinying"
+autoplay = "shinying"
 frame = 8
 frame_progress = 0.30685085
