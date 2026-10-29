@@ -1,6 +1,7 @@
 extends Node2D;
 
-@export var coin_scene : PackedScene; #A variável coin_scene vai ser da classe packedScene.
+@export var powerup_scene : PackedScene
+
 @export var playtime = 30;
 
 var level = 1;
@@ -66,10 +67,17 @@ func _on_player_hurt() -> void:
 	game_over(); 
 
 
-func _on_player_pickup() -> void:
-	score += 1; #Aumenta o score.
-	$HUD.update_score(score); #mostra o score já aumentado.
-	$CoinSound.play();
+func _on_player_pickup(type):
+	match type:
+		"coin":
+			score += 1; #Aumenta o score.
+			$HUD.update_score(score); #mostra o score já aumentado.
+			$CoinSound.play();
+		
+		"powerup":
+			$PowerupSound.play();
+			time_left += 5;
+			$HUD.update_timer(time_left);
 
 func _on_hud_start_game() -> void:
 	new_game(); #Quando o botão for clicado, começa o jogo.

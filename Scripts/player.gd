@@ -49,11 +49,15 @@ func _process(delta: float) -> void:  #Já essa roda a todo momento, a cada fram
 
 
 
-func _on_area_entered(area: Area2D) -> void: #quando algo entrar na hitbox do player, esse algo vai se chamar area,
+func _on_area_entered(area: Area2D): #quando algo entrar na hitbox do player, esse algo vai se chamar area,
 	if (area.is_in_group("coins")): #se essa area for do grupo das moedas.
 		area.pickuped(); #vai pegar a moeda.
-		pickup.emit(); #e vai emitir um sinal falando que pegou a moeda.
+		pickup.emit("coin"); #e vai emitir um sinal falando que pegou a moeda.
+
+	if (area.is_in_group("powerups")):
+		area.pickuped();
+		pickup.emit("powerup");
 
 	if (area.is_in_group("obstacles")): #Agora se essa area for do grupo dos obstáculos,
 		hurt.emit(); #o prsonagem vai trocar para a animação de dano,
-		die() # e vai morrer.
+		die(); # e vai morrer.
