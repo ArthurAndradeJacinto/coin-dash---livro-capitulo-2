@@ -13,6 +13,7 @@
 [sub_resource type="GDScript" id="GDScript_6bp64"]
 script/source = "extends Node2D;
 
+@export var obstacles_scene : PackedScene;
 @export var powerup_scene : PackedScene;
 @export var coin_scene : PackedScene; #A variável coin_scene vai ser da classe packedScene.
 
@@ -23,6 +24,15 @@ var score = 0;
 var time_left = 0;
 var screensize = Vector2.ZERO; 
 var playing = false; #Aqui o jogo ainda não começou e todas as variáveis ficam no seu estado inicial.
+
+
+func spawn_cactus():
+	for i in round(level / 3) + 1:
+		var obst = obstacles_scene.instantiate();
+		add_child(obst); 
+		obst.screensize = screensize;
+		obst.position = Vector2(randi_range(0, screensize.x),
+		randi_range(0, screensize.y));
 
 
 func spawn_coins():
@@ -44,15 +54,16 @@ func new_game():
 	$Player.show();  #Agora fica visível
 	$Game_Timer.start(); #Começa o contador
 	spawn_coins(); #spawna as moedas em locais aleatórios do mapa.
+	spawn_cactus();
 	$HUD.update_score(score);
 	$HUD.update_time(time_left);
 
 func game_over():
-	playing = false #Para o jogo.
-	$Game_Timer.stop() #Para o Timer de main.
-	get_tree().call_group(\"coins\", \"queue_free\") #Arrebata todas as moedas.
-	$HUD.show_game_over() #Mostra a tela de game over.
-	$Player.die() #player executa o comando de morte.
+	playing = false; #Para o jogo.
+	$Game_Timer.stop(); #Para o Timer de main.
+	get_tree().call_group(\"coins\", \"queue_free\"); #Arrebata todas as moedas.
+	$HUD.show_game_over(); #Mostra a tela de game over.
+	$Player.die(); #player executa o comando de morte.
 	$EndSound.play();
 
 
@@ -67,6 +78,8 @@ func _process(delta: float) -> void:
 		level += 1; #Aumenta o level em 1.
 		time_left += 5; #Aumenta o temporizador em +5
 		spawn_coins(); #Spawna as moedas de novo.
+		get_tree().call_group(\"obstacles\", \"queue_free\");
+		spawn_cactus();
 		$PowerupTimer.start();
 
 func _on_game_timer_timeout() -> void: #Quando o temporizador de main chegar a 0.
